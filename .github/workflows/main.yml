@@ -12,14 +12,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Unpack jarvis.zip if present
+      - name: Unpack zip archive if present
         run: |
-          if [ -f "jarvis.zip" ]; then
-            mkdir -p unpacked_jarvis
-            unzip -o jarvis.zip -d unpacked_jarvis
+          mkdir -p unpacked_jarvis
+          ZIP_FILE=$(ls *.zip 2>/dev/null | head -n 1)
+          if [ -n "$ZIP_FILE" ]; then
+            echo "Unpacking $ZIP_FILE"
+            unzip -o "$ZIP_FILE" -d unpacked_jarvis
             find unpacked_jarvis -maxdepth 3 -ls
           fi
+
+      
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
